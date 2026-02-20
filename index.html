@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wakarimasu</title>
+    <style>
+        /* --- GLOBAL & BACKGROUND --- */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            background: url('assets/img/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-container {
+            width: 1100px; /* Widened slightly for symmetry */
+            background: rgba(74, 108, 227, 0.9);
+            border: 4px solid #2e448b;
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            background: linear-gradient(to bottom, #4a6ee0, #2b4491);
+            border-radius: 20px;
+            padding: 15px;
+            border: 2px solid #7795f8;
+            color: white;
+            text-align: center;
+        }
+
+        /* --- SYMMETRIC LAYOUT --- */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            gap: 25px;
+            align-items: start;
+        }
+
+        /* --- SIDEBARS --- */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* --- MENU STYLING (Shared by Left and Right) --- */
+        .pokemon-menu {
+            background: #f8f8f8;
+            border: 3px solid #686878;
+            box-shadow: 4px 4px 0px #383840;
+            border-radius: 2px;
+        }
+
+        .menu-header {
+            background: #686878;
+            color: white;
+            font-size: 11px;
+            padding: 2px 5px;
+            text-align: center;
+        }
+
+        .menu-item {
+            padding: 10px;
+            border-bottom: 2px solid #d8d8d8;
+            color: #484848;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:hover { background: #eee; }
+
+        /* --- ASSET BOXES (Symmetric Alignment) --- */
+        .asset-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px; /* Forced height to ensure Treecko and Cycling match */
+        }
+
+        .asset-box img {
+            max-width: 100%;
+            max-height: 100%;
+            image-rendering: pixelated;
+        }
+
+        /* --- HALL OF FAME SLIDER --- */
+        .gen-slider-container {
+            background: #e0e0a8;
+            border: 4px double #305080;
+            padding: 15px;
+        }
+
+        .gen-nav {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .gen-nav label {
+            background: #305080;
+            color: white;
+            padding: 6px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid #7795f8;
+        }
+
+        .gen-nav label:hover { background: #4a6ee0; }
+
+        .cards-wrapper { display: block; }
+        .hof-card { display: none; }
+        
+        /* Radio Switch Logic */
+        #gen1:checked ~ .cards-wrapper .card-1,
+        #gen2:checked ~ .cards-wrapper .card-2,
+        #gen3:checked ~ .cards-wrapper .card-3,
+        #gen4:checked ~ .cards-wrapper .card-4,
+        #gen5:checked ~ .cards-wrapper .card-5,
+        #gen6:checked ~ .cards-wrapper .card-6,
+        #gen7:checked ~ .cards-wrapper .card-7,
+        #gen8:checked ~ .cards-wrapper .card-8,
+        #gen9:checked ~ .cards-wrapper .card-9 {
+            display: block;
+        }
+
+        input[type="radio"] { display: none; }
+
+        .hof-title {
+            background: #305080;
+            color: white;
+            padding: 8px;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .pokemon-grid {
+            background: #80c8b0;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 20px;
+            border: 2px solid #305080;
+        }
+
+        .pkmn-slot {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px dashed white;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- TRAINER CARD --- */
+        .trainer-card {
+            background: #f8d030;
+            border: 3px solid #b8a038;
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+
+        .footer { text-align: center; color: white; margin-top: 20px; font-size: 11px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    <header class="site-header">
+        <h1>Waka the Baka</h1>
+        <p>The Ultimate nerd of a Bakayarou</p>
+    </header>
+
+    <div class="main-layout">
+        <div class="sidebar">
+            <nav class="pokemon-menu">
+                <div class="menu-header">MAIN MENU</div>
+                <div class="menu-item">▶ HOME</div>
+                <div class="menu-item">&nbsp;&nbsp;POKéDEX</div>
+                <div class="menu-item">&nbsp;&nbsp;POKéMON</div>
+                <div class="menu-item">&nbsp;&nbsp;BAG</div>
+                <div class="menu-item">&nbsp;&nbsp;SAVE</div>
+            </nav>
+            <div class="asset-box">
+                <img src="assets/img/treeko-parkour.gif" alt="Treecko Parkour">
+            </div>
+        </div>
+
+        <main>
+            <div class="trainer-card">
+                <span>TRAINER CARD</span>
+                <span>IDNo. 20260</span>
+            </div>
+
+            <div class="gen-slider-container">
+                <input type="radio" name="gen" id="gen1">
+                <input type="radio" name="gen" id="gen2">
+                <input type="radio" name="gen" id="gen3" checked>
+                <input type="radio" name="gen" id="gen4">
+                <input type="radio" name="gen" id="gen5">
+                <input type="radio" name="gen" id="gen6">
+                <input type="radio" name="gen" id="gen7">
+                <input type="radio" name="gen" id="gen8">
+                <input type="radio" name="gen" id="gen9">
+
+                <div class="gen-nav">
+                    <label for="gen1">GEN 1</label> <label for="gen2">GEN 2</label>
+                    <label for="gen3">GEN 3</label> <label for="gen4">GEN 4</label>
+                    <label for="gen5">GEN 5</label> <label for="gen6">GEN 6</label>
+                    <label for="gen7">GEN 7</label> <label for="gen8">GEN 8</label>
+                    <label for="gen9">GEN 9</label>
+                </div>
+
+                <div class="cards-wrapper">
+                    <div class="hof-card card-1"><span class="hof-title">HALL OF FAME - KANTO</span><div class="pokemon-grid"><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div></div></div>
+                    
+                    <div class="hof-card card-3">
+                        <span class="hof-title">HALL OF FAME - HOENN</span>
+                        <div class="pokemon-grid">
+                            <div class="pkmn-slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/130.png"></div>
+                            <div class="pkmn-slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/254.png"></div>
+                            <div class="pkmn-slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/356.png"></div>
+                            <div class="pkmn-slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/101.png"></div>
+                            <div class="pkmn-slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/277.png"></div>
+                            <div class="pkmn-slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/306.png"></div>
+                        </div>
+                    </div>
+
+                    <div class="hof-card card-9"><span class="hof-title">HALL OF FAME - PALDEA</span><div class="pokemon-grid"><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div><div class="pkmn-slot">?</div></div></div>
+                </div>
+            </div>
+        </main>
+
+        <div class="sidebar">
+            <nav class="pokemon-menu">
+                <div class="menu-header">SOCIALS / LINKS</div>
+                <div class="menu-item">SPACEHEY</div>
+                <div class="menu-item">BITVIEW</div>
+                <div class="menu-item">KO-FI</div>
+                <div class="menu-item">E-MAIL</div>
+                <div class="menu-item">CREDITS</div>
+            </nav>
+            <div class="asset-box">
+                <img src="assets/img/cycling.gif" alt="Cycling">
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        2022-2025 © Daniele63 <br>
+        Built with Hoenn Pride
+    </footer>
+</div>
+
+</body>
+</html>
